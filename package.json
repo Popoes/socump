@@ -1,0 +1,58 @@
+{
+  "name": "socump",
+  "version": "1.0.0",
+  "description": "Social App Browser Detection and Redirect - 检测社交应用内置浏览器并引导用户跳转到外部浏览器",
+  "main": "socump.js",
+  "files": [
+    "socump.js",
+    "socump.min.js",
+    "index.html",
+    "demo.html",
+    "README.md"
+  ],
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "serve": "python -m http.server 8000",
+    "demo": "start demo.html",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "keywords": [
+    "wechat",
+    "qq",
+    "social-app",
+    "browser-detection",
+    "redirect",
+    "mobile",
+    "weixin",
+    "alipay",
+    "weibo",
+    "jump",
+    "外链跳转",
+    "微信跳转",
+    "浏览器检测"
+  ],
+  "author": {
+    "name": "SoCump Team"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/username/socump.git"
+  },
+  "bugs": {
+    "url": "https://github.com/username/socump/issues"
+  },
+  "homepage": "https://github.com/username/socump#readme",
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "iOS >= 10",
+    "Android >= 5"
+  ],
+  "devDependencies": {},
+  "dependencies": {}
+}

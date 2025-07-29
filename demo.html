@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoCump 使用示例</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        
+        .header p {
+            margin: 10px 0 0;
+            opacity: 0.9;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            margin-top: 0;
+        }
+        
+        .demo-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .demo-link {
+            display: block;
+            padding: 20px;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .demo-link:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+        
+        .demo-link h3 {
+            margin: 0 0 10px;
+            color: #667eea;
+        }
+        
+        .demo-link p {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        
+        .code-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #e9ecef;
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .feature-list li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .browser-support {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .browser-item {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .browser-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        
+        .browser-name {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .status-supported {
+            color: #28a745;
+        }
+        
+        .status-partial {
+            color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌐 SoCump</h1>
+        <p>Social App Browser Detection and Redirect</p>
+        <p>检测社交应用内置浏览器并引导用户跳转到外部浏览器</p>
+    </div>
+
+    <div class="section">
+        <h2>📱 功能特性</h2>
+        <ul class="feature-list">
+            <li>自动检测微信、QQ、支付宝、微博等社交应用内置浏览器</li>
+            <li>智能引导用户跳转到外部浏览器</li>
+            <li>支持URL参数传递目标链接</li>
+            <li>一键复制链接到剪贴板</li>
+            <li>响应式设计，适配移动端</li>
+            <li>无依赖，纯JavaScript实现</li>
+            <li>支持自定义样式和文案</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>🚀 快速开始</h2>
+        <p>将以下代码添加到您的HTML页面中：</p>
+        <div class="code-block">
+            <code>&lt;script src="socump.js"&gt;&lt;/script&gt;</code>
+        </div>
+        <p>或者通过URL参数指定目标链接：</p>
+        <div class="code-block">
+            <code>https://yoursite.com/index.html?url=https://target-site.com</code>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🔗 演示链接</h2>
+        <p>点击以下链接在不同场景下测试功能：</p>
+        <div class="demo-links">
+            <a href="index.html" class="demo-link">
+                <h3>基础演示</h3>
+                <p>当前页面跳转提示</p>
+            </a>
+            <a href="index.html?url=https://www.baidu.com" class="demo-link">
+                <h3>百度跳转</h3>
+                <p>跳转到百度首页</p>
+            </a>
+            <a href="index.html?url=https://github.com" class="demo-link">
+                <h3>GitHub跳转</h3>
+                <p>跳转到GitHub</p>
+            </a>
+            <a href="index.html?target=https://www.google.com" class="demo-link">
+                <h3>Google跳转</h3>
+                <p>使用target参数</p>
+            </a>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>📱 浏览器支持</h2>
+        <div class="browser-support">
+            <div class="browser-item">
+                <div class="browser-icon">💬</div>
+                <div class="browser-name">微信</div>
+                <div class="status-supported">✓ 支持</div>
+            </div>
+            <div class="browser-item">
+                <div class="browser-icon">🐧</div>
+                <div class="browser-name">QQ</div>
+                <div class="status-supported">✓ 支持</div>
+            </div>
+            <div class="browser-item">
+                <div class="browser-icon">🌐</div>
+                <div class="browser-name">QQ浏览器</div>
+                <div class="status-partial">⚠ 部分支持</div>
+            </div>
+            <div class="browser-item">
+                <div class="browser-icon">💰</div>
+                <div class="browser-name">支付宝</div>
+                <div class="status-supported">✓ 支持</div>
+            </div>
+            <div class="browser-item">
+                <div class="browser-icon">📱</div>
+                <div class="browser-name">微博</div>
+                <div class="status-supported">✓ 支持</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>⚙️ 高级用法</h2>
+        <p>您可以通过JavaScript API进行更多自定义：</p>
+        <div class="code-block">
+            <code>// 创建实例
+const socump = new SoCump();
+
+// 检测浏览器类型
+if (socump.isWeChat()) {
+    console.log('在微信中打开');
+}
+
+// 手动触发跳转
+socump.openInBrowser();
+
+// 复制链接
+socump.copyToClipboard('https://example.com');</code>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>📝 使用说明</h2>
+        <ol>
+            <li><strong>自动检测：</strong>脚本会自动检测当前是否在社交应用内置浏览器中</li>
+            <li><strong>智能跳转：</strong>如果不在社交应用中，会自动跳转到目标URL</li>
+            <li><strong>用户引导：</strong>如果在社交应用中，会显示引导页面</li>
+            <li><strong>一键复制：</strong>用户可以一键复制链接到剪贴板</li>
+            <li><strong>手动打开：</strong>尝试在外部浏览器中打开链接</li>
+        </ol>
+    </div>
+
+    <script>
+        // 添加一些交互效果
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为演示链接添加点击统计
+            const demoLinks = document.querySelectorAll('.demo-link');
+            demoLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    console.log('点击演示链接:', this.href);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
