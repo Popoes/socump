@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能域名选择 | GALAXY MACAU</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .description {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        .progress-container {
+            margin: 30px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .status-list {
+            text-align: left;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 14px;
+        }
+
+        .status-item:last-child {
+            border-bottom: none;
+        }
+
+        .domain-name {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .status {
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .status.testing {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status.fastest {
+            background: #667eea;
+            color: white;
+        }
+
+        .result-container {
+            margin-top: 20px;
+            padding: 20px;
+            background: #e8f5e8;
+            border-radius: 12px;
+            border-left: 4px solid #28a745;
+            display: none;
+        }
+
+        .result-container.show {
+            display: block;
+        }
+
+        .fastest-domain {
+            font-size: 18px;
+            font-weight: 600;
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+
+        .redirect-info {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .countdown {
+            font-size: 20px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .manual-select {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .manual-select.show {
+            display: block;
+        }
+
+        .domain-button {
+            display: inline-block;
+            margin: 5px;
+            padding: 8px 16px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .domain-button:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .error-container {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8d7da;
+            border-radius: 12px;
+            border-left: 4px solid #dc3545;
+            display: none;
+        }
+
+        .error-container.show {
+            display: block;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+            
+            .description {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🚀</div>
+        <h1>正在为您选择最佳访问节点</h1>
+        <div class="description">
+            正在后台检测多个域名的访问速度，请稍候...
+        </div>
+        
+        <div class="loading-animation" style="margin: 30px 0; text-align: center;">
+            <div class="spinner" style="display: inline-block; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+        </div>
+
+        <style>
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        </style>
+
+        <!-- 隐藏的进度和状态元素 -->
+        <div class="progress-container" style="display: none;">
+            <div class="progress-text" id="progressText">准备开始测试...</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div class="status-list" id="statusList" style="display: none;">
+            <!-- 动态生成状态列表 -->
+        </div>
+
+        <div class="result-container" id="resultContainer">
+            <div class="fastest-domain" id="fastestDomain"></div>
+            <div class="redirect-info">将在 <span class="countdown" id="countdown">3</span> 秒后自动跳转</div>
+        </div>
+
+        <div class="error-container" id="errorContainer">
+            <h3 style="color: #dc3545; margin-bottom: 10px;">测试失败</h3>
+            <p style="color: #721c24; font-size: 14px;">所有域名都无法访问，请检查网络连接或手动选择域名。</p>
+        </div>
+
+        <div class="manual-select" id="manualSelect">
+            <h4 style="margin-bottom: 15px; color: #333;">手动选择域名：</h4>
+            <div id="domainButtons">
+                <!-- 动态生成域名按钮 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 社交应用浏览器检测功能
+        class SocialAppDetector {
+            constructor() {
+                this.userAgent = navigator.userAgent.toLowerCase();
+            }
+
+            // 检测是否在微信内置浏览器中
+            isWeChat() {
+                return this.userAgent.includes('micromessenger');
+            }
+
+            // 检测是否在QQ内置浏览器中
+            isQQ() {
+                return this.userAgent.includes('qq/') && !this.userAgent.includes('mqqbrowser');
+            }
+
+            // 检测是否在QQ浏览器中
+            isQQBrowser() {
+                return this.userAgent.includes('mqqbrowser');
+            }
+
+            // 检测是否在微博内置浏览器中
+            isWeibo() {
+                return this.userAgent.includes('weibo');
+            }
+
+            // 检测是否在支付宝内置浏览器中
+            isAlipay() {
+                return this.userAgent.includes('alipayclient');
+            }
+
+            // 检测是否在任何社交应用内置浏览器中
+            isInSocialApp() {
+                return this.isWeChat() || this.isQQ() || this.isQQBrowser() || this.isWeibo() || this.isAlipay();
+            }
+
+            // 获取浏览器名称
+            getBrowserName() {
+                if (this.isWeChat()) return '微信';
+                if (this.isQQ()) return 'QQ';
+                if (this.isQQBrowser()) return 'QQ浏览器';
+                if (this.isWeibo()) return '微博';
+                if (this.isAlipay()) return '支付宝';
+                return '社交应用';
+            }
+        }
+
+        class DomainSpeedTester {
+            constructor() {
+                // 首先检测是否在社交应用中
+                this.socialDetector = new SocialAppDetector();
+                
+                if (this.socialDetector.isInSocialApp()) {
+                    this.showSocialAppWarning();
+                    return;
+                }
+                
+                // 配置域名列表 - 可以根据需要修改
+                this.domains = [
+                    { name: 'google.com', url: 'https://google.com' },
+                    { name: 'baidu.com', url: 'https://baidu.com' },
+                    { name: 'github.com', url: 'https://github.com' },
+                    { name: 'stackoverflow.com', url: 'https://stackoverflow.com' }
+                ];
+                
+                // 从URL参数获取自定义域名
+                this.loadDomainsFromParams();
+                
+                this.results = [];
+                this.currentProgress = 0;
+                this.totalTests = this.domains.length;
+                
+                this.init();
+            }
+
+            // 显示社交应用警告
+            showSocialAppWarning() {
+                const browserName = this.socialDetector.getBrowserName();
+                
+                // 修改页面内容
+                document.querySelector('.logo').textContent = '⚠️';
+                document.querySelector('h1').textContent = '请在浏览器中打开';
+                document.querySelector('.description').innerHTML = `
+                    检测到您正在<strong>${browserName}</strong>内置浏览器中访问。<br>
+                    为了获得最佳体验和功能完整性，请使用手机默认浏览器打开此页面。
+                `;
+                
+                // 隐藏进度条和状态列表
+                document.querySelector('.progress-container').style.display = 'none';
+                document.getElementById('statusList').style.display = 'none';
+                
+                // 显示操作指引
+                this.showBrowserGuide(browserName);
+            }
+
+            // 显示浏览器打开指引
+            showBrowserGuide(browserName) {
+                const guideContainer = document.createElement('div');
+                guideContainer.className = 'browser-guide';
+                guideContainer.style.cssText = `
+                    margin: 30px 0;
+                    padding: 20px;
+                    background: #fff3cd;
+                    border: 1px solid #ffeaa7;
+                    border-radius: 12px;
+                    border-left: 4px solid #f39c12;
+                `;
+                
+                let guideSteps = '';
+                
+                if (browserName === '微信') {
+                    guideSteps = `
+                        <div class="guide-steps">
+                            <div class="step-item">1. 点击右上角 <strong>"⋯"</strong> 菜单按钮</div>
+                            <div class="step-item">2. 选择 <strong>"在浏览器中打开"</strong></div>
+                            <div class="step-item">3. 选择您的默认浏览器（如Safari、Chrome等）</div>
+                        </div>
+                    `;
+                } else if (browserName === 'QQ') {
+                    guideSteps = `
+                        <div class="guide-steps">
+                            <div class="step-item">1. 点击右上角 <strong>"⋯"</strong> 菜单按钮</div>
+                            <div class="step-item">2. 选择 <strong>"在浏览器中打开"</strong></div>
+                            <div class="step-item">3. 选择您的默认浏览器</div>
+                        </div>
+                    `;
+                } else {
+                    guideSteps = `
+                        <div class="guide-steps">
+                            <div class="step-item">1. 点击右上角菜单按钮</div>
+                            <div class="step-item">2. 选择 <strong>"在浏览器中打开"</strong> 或 <strong>"用浏览器打开"</strong></div>
+                            <div class="step-item">3. 选择您的默认浏览器</div>
+                        </div>
+                    `;
+                }
+                
+                guideContainer.innerHTML = `
+                    <h3 style="margin: 0 0 15px; color: #856404; font-size: 16px;">📱 操作步骤：</h3>
+                    ${guideSteps}
+                    <div style="margin-top: 15px; padding: 10px; background: rgba(255,255,255,0.7); border-radius: 6px; font-size: 14px; color: #856404;">
+                        💡 <strong>提示：</strong>在默认浏览器中打开后，您将能够正常使用域名速度测试功能。
+                    </div>
+                `;
+                
+                // 添加步骤样式
+                const stepStyle = document.createElement('style');
+                stepStyle.textContent = `
+                    .guide-steps .step-item {
+                        padding: 8px 0;
+                        border-bottom: 1px solid rgba(255,234,167,0.5);
+                        font-size: 14px;
+                        color: #856404;
+                    }
+                    .guide-steps .step-item:last-child {
+                        border-bottom: none;
+                    }
+                `;
+                document.head.appendChild(stepStyle);
+                
+                // 插入到描述后面
+                const description = document.querySelector('.description');
+                description.parentNode.insertBefore(guideContainer, description.nextSibling);
+                
+                // 添加复制当前URL的功能
+                this.addCopyUrlFeature();
+            }
+
+            // 添加复制URL功能
+            addCopyUrlFeature() {
+                const copyContainer = document.createElement('div');
+                copyContainer.style.cssText = `
+                    margin: 20px 0;
+                    padding: 15px;
+                    background: #f8f9fa;
+                    border-radius: 8px;
+                    border: 1px solid #e9ecef;
+                `;
+                
+                copyContainer.innerHTML = `
+                    <div style="margin-bottom: 10px; font-size: 14px; color: #666;">当前页面地址：</div>
+                    <div style="background: white; padding: 10px; border-radius: 6px; font-family: monospace; font-size: 12px; word-break: break-all; border: 1px solid #ddd; margin-bottom: 10px;">${window.location.href}</div>
+                    <button id="copyUrlBtn" style="width: 100%; padding: 10px; background: #667eea; color: white; border: none; border-radius: 6px; font-size: 14px; cursor: pointer;">📋 复制页面地址</button>
+                `;
+                
+                document.querySelector('.container').appendChild(copyContainer);
+                
+                // 绑定复制功能
+                document.getElementById('copyUrlBtn').addEventListener('click', () => {
+                    this.copyToClipboard(window.location.href);
+                });
+            }
+
+            // 复制到剪贴板
+            copyToClipboard(text) {
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        this.showToast('页面地址已复制到剪贴板');
+                    }).catch(() => {
+                        this.fallbackCopy(text);
+                    });
+                } else {
+                    this.fallbackCopy(text);
+                }
+            }
+
+            // 降级复制方案
+            fallbackCopy(text) {
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-9999px';
+                document.body.appendChild(textArea);
+                textArea.select();
+                
+                try {
+                    document.execCommand('copy');
+                    this.showToast('页面地址已复制到剪贴板');
+                } catch (err) {
+                    this.showToast('复制失败，请手动复制地址');
+                }
+                
+                document.body.removeChild(textArea);
+            }
+
+            // 显示提示消息
+            showToast(message) {
+                const toast = document.createElement('div');
+                toast.textContent = message;
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: rgba(0, 0, 0, 0.8);
+                    color: white;
+                    padding: 12px 24px;
+                    border-radius: 25px;
+                    font-size: 14px;
+                    z-index: 10000;
+                    transition: opacity 0.3s ease;
+                `;
+                
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    setTimeout(() => {
+                        if (document.body.contains(toast)) {
+                            document.body.removeChild(toast);
+                        }
+                    }, 300);
+                }, 2000);
+            }
+
+            // 从URL参数加载域名配置
+            loadDomainsFromParams() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const domainsParam = urlParams.get('domains');
+                
+                if (domainsParam) {
+                    try {
+                        const customDomains = JSON.parse(decodeURIComponent(domainsParam));
+                        if (Array.isArray(customDomains) && customDomains.length > 0) {
+                            this.domains = customDomains.map(domain => {
+                                if (typeof domain === 'string') {
+                                    return { name: domain, url: domain.startsWith('http') ? domain : `https://${domain}` };
+                                }
+                                return domain;
+                            });
+                        }
+                    } catch (e) {
+                        console.warn('无法解析domains参数:', e);
+                    }
+                }
+            }
+
+            // 静默初始化
+            init() {
+                this.startTesting();
+            }
+
+            // 静默渲染，不显示状态列表
+            renderStatusList() {
+                // 静默模式，不生成状态列表
+            }
+
+            // 渲染域名按钮
+            renderDomainButtons() {
+                const domainButtons = document.getElementById('domainButtons');
+                domainButtons.innerHTML = this.domains.map(domain => `
+                    <a href="${domain.url}" class="domain-button">${domain.name}</a>
+                `).join('');
+            }
+
+            // 获取域名ID（用于DOM操作）
+            getDomainId(domainName) {
+                return domainName.replace(/[^a-zA-Z0-9]/g, '-');
+            }
+
+            // 静默检测，不显示进度和状态
+            updateProgress(current, total, text) {
+                // 静默模式，不更新UI
+            }
+
+            // 静默更新域名状态
+            updateDomainStatus(domainName, status, responseTime = null) {
+                // 静默模式，不更新UI
+            }
+
+            // 静默测试单个域名速度
+            async testDomainSpeed(domain) {
+                const startTime = Date.now();
+                const timeout = 5000; // 5秒超时
+                
+                try {
+                    // 使用fetch测试连接速度
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), timeout);
+                    
+                    const response = await fetch(domain.url, {
+                        method: 'HEAD', // 只获取头部信息，减少数据传输
+                        mode: 'no-cors', // 避免CORS问题
+                        signal: controller.signal,
+                        cache: 'no-cache'
+                    });
+                    
+                    clearTimeout(timeoutId);
+                    const responseTime = Date.now() - startTime;
+                    
+                    return {
+                        domain: domain,
+                        responseTime: responseTime,
+                        success: true
+                    };
+                } catch (error) {
+                    const responseTime = Date.now() - startTime;
+                    
+                    return {
+                        domain: domain,
+                        responseTime: responseTime,
+                        success: false,
+                        error: error.message
+                    };
+                }
+            }
+
+            // 开始测试所有域名
+            async startTesting() {
+                // 静默开始测试
+                
+                // 并发测试所有域名
+                const testPromises = this.domains.map(async (domain, index) => {
+                    const result = await this.testDomainSpeed(domain);
+                    this.currentProgress++;
+                    return result;
+                });
+                
+                try {
+                    this.results = await Promise.all(testPromises);
+                    this.handleTestResults();
+                } catch (error) {
+                    console.error('测试过程中发生错误:', error);
+                    this.showError();
+                }
+            }
+
+            // 处理测试结果
+            handleTestResults() {
+                // 过滤成功的结果并按响应时间排序
+                const successResults = this.results
+                    .filter(result => result.success)
+                    .sort((a, b) => a.responseTime - b.responseTime);
+                
+                if (successResults.length === 0) {
+                    this.showError();
+                    return;
+                }
+                
+                // 获取最快的域名
+                const fastest = successResults[0];
+                
+                // 标记最快的域名
+                this.updateDomainStatus(fastest.domain.name, 'fastest', fastest.responseTime);
+                
+                // 显示结果并开始倒计时
+                this.showResult(fastest);
+            }
+
+            // 显示测试结果
+            showResult(fastest) {
+                const resultContainer = document.getElementById('resultContainer');
+                const fastestDomain = document.getElementById('fastestDomain');
+                
+                fastestDomain.textContent = `最快域名: ${fastest.domain.name} (${fastest.responseTime}ms)`;
+                resultContainer.classList.add('show');
+                
+                // 静默完成测试
+                
+                // 开始倒计时
+                this.startCountdown(fastest.domain.url);
+            }
+
+            // 显示错误信息
+            showError() {
+                const errorContainer = document.getElementById('errorContainer');
+                const manualSelect = document.getElementById('manualSelect');
+                
+                errorContainer.classList.add('show');
+                manualSelect.classList.add('show');
+                
+                // 静默完成测试，显示错误
+            }
+
+            // 开始倒计时并跳转
+            startCountdown(targetUrl) {
+                let countdown = 3;
+                const countdownElement = document.getElementById('countdown');
+                
+                const timer = setInterval(() => {
+                    countdown--;
+                    countdownElement.textContent = countdown;
+                    
+                    if (countdown <= 0) {
+                        clearInterval(timer);
+                        window.location.href = targetUrl;
+                    }
+                }, 1000);
+                
+                // 点击任意地方立即跳转
+                document.addEventListener('click', () => {
+                    clearInterval(timer);
+                    window.location.href = targetUrl;
+                }, { once: true });
+            }
+        }
+
+        // 页面加载完成后开始测试
+        document.addEventListener('DOMContentLoaded', () => {
+            new DomainSpeedTester();
+        });
+
+        // 导出供外部使用
+        window.DomainSpeedTester = DomainSpeedTester;
+    </script>
+</body>
+</html>

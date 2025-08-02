@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>Page open | GALAXY MACAU</title>
+</head>
+
+<body>
+	<style type="text/css">
+		* {
+			margin: 0px;
+			padding: 0px;
+		}
+		
+		img,
+		button {
+			display: block;
+		}
+		
+		html,
+		body {
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+		}
+		
+		#show {
+			width: 100%;
+			height: 100%;
+		}
+		
+		#shade {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			background-image: url("open.png");
+			background-repeat: no-repeat;
+			background-size: contain;
+			background-color: rgba(0, 0, 0, 0.7);
+		}
+		
+		#hide {
+			width: 100%;
+			height: 100%;
+		}
+		
+		.mrigin-auto {
+			margin: 20% auto 0;
+		}
+		
+		#btn,
+		#btn_weixin {
+			width: 30%;
+			height: 40px;
+			font-weight: bold;
+			outline: none;
+		}
+		
+		.text-center {
+			text-align: center;
+			margin: 10% 0;
+		}
+		
+		.intro {
+			display: block;
+			width: 50%;
+			margin: 10px auto !important;
+		}
+		
+		#intro {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			overflow: scroll;
+			display: none;
+			background: rgba(0, 0, 0, 0.6);
+		}
+	</style>
+	<div id="show" style="display:none">
+		<div id="shade" style="display:none"></div>
+		<img class="mrigin-auto" id="img_weixin" src="" alt="">
+		<button class="mrigin-auto" id="btn_weixin">点击下载</button>
+	</div>
+	<div id="hide" style="display:block">
+		<img class="mrigin-auto" id="img" src="" alt="">
+		<button class="mrigin-auto" id="btn">点击下载</button>
+	</div>
+</body>
+<script type="text/javascript">
+	window.onload = function () {
+		var ua = window.navigator.userAgent.toLowerCase();
+		var u = navigator.userAgent;
+		var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+		var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+		if (ua.match(/MicroMessenger/i) == 'micromessenger' || u.match(/QQ\//i) == "QQ/"/*u.indexOf('MQQBrowser') !== -1 || u.indexOf('MQQBrowser QQ') !== -1*/) {
+			document.getElementById("show").style.display = "block";
+			document.getElementById("hide").style.display = "none";
+			document.getElementById("img_weixin").src = 'galaxy.png';
+			document.getElementById("btn_weixin").addEventListener('click', function () {
+				document.getElementById("shade").style.display = "block";
+				document.getElementById("btn_weixin").removeEventListener('click');
+			});
+
+		}
+		if (isAndroid) {
+			document.getElementById("img").src = 'galaxy.png';
+			document.getElementById("btn").addEventListener('click', function () {
+				window.location.href = 'https://139.224.195.129:7788/apk/LotterySite.apk';
+				document.getElementById("btn").removeEventListener('click');
+			});
+		} else {
+			document.getElementById("img").src = 'logo.png';
+			document.getElementById("intro").style.display = 'block';
+			document.getElementById("intro").addEventListener('click', function () {
+				document.getElementById("intro").style.display = 'none';
+				document.getElementById("intro").removeEventListener('click');
+			})
+			document.getElementById("btn").addEventListener('click', function () {
+				window.location.href = 'itms-services:///?action=download-manifest&url=https://www.rongqiangu.com:7788/ipa/LotterySite.plist';
+				document.getElementById("btn").removeEventListener('click');
+			});
+		}
+	}
+
+</script>
+<html>
